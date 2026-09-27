@@ -1,0 +1,58 @@
+name: Bilingual Windows installer smoke
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  RELEASES_REPO: realmichelduarte/michel-s-life-releases
+
+jobs:
+  installer-smoke:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Materialize host
+        shell: pwsh
+        run: python tools/materialize_host_source.py
+
+      - name: Prepare bilingual bundle and icon
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/$env:RELEASES_REPO/releases/latest/download/AppBundle.zip" -OutFile 'src/MichelsLife/AppBundle.zip'
+          New-Item -ItemType Directory -Force 'src/MichelsLife/Assets' | Out-Null
+          Invoke-WebRequest -Uri "https://github.com/$env:RELEASES_REPO/releases/latest/download/michels_life_icon.ico" -OutFile 'src/MichelsLife/Assets/michels_life_icon.ico'
+          python tools/append_overlay.py --index src/MichelsLife/frontend/index.html --overlay src/MichelsLife/AppPatches/i18n-v308.html --marker "mlv-i18n-v308"
+          python tools/replace_bundle_index.py --bundle src/MichelsLife/AppBundle.zip --index src/MichelsLife/frontend/index.html
+          python tools/inject_bundle_asset.py --bundle src/MichelsLife/AppBundle.zip --source branding/michel_duarte_avatar.jpg --arcname assets/michel_duarte_avatar.jpg
+          python tools/inject_bundle_asset.py --bundle src/MichelsLife/AppBundle.zip --source branding/michels_life_logo.svg --arcname assets/michels_life_logo.svg
+
+      - name: Compile Windows host
+        shell: pwsh
+        run: |
+          dotnet restore src/MichelsLife/MichelsLife.csproj
+          dotnet publish src/MichelsLife/MichelsLife.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/publish
+
+      - name: Compile bilingual installer
+        shell: pwsh
+        run: |
+          choco install innosetup --yes --no-progress
+          [xml]$proj = Get-Content 'src/MichelsLife/MichelsLife.csproj'
+          $v = [string]$proj.Project.PropertyGroup.Version
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DMyAppVersion=$v" "/DPublishDir=$((Resolve-Path 'artifacts/publish').Path)" installer/MichelsLife.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Bilingual installer compilation failed.' }
+          $setup = "artifacts/MichelsLife-Setup-v$v.exe"
+          if (-not (Test-Path $setup)) { throw "Installer missing: $setup" }
+          Write-Host "Bilingual installer compiled successfully: $setup"

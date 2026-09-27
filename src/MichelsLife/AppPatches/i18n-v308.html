@@ -1,0 +1,574 @@
+<!-- mlv-i18n-v308: English/Spanish localization layer -->
+<style id="mlv-i18n-v308-style">
+[data-mlv-i18n-card] .mlv-i18n-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+[data-mlv-i18n-card] .mlv-i18n-choice{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.055);color:var(--text);border-radius:14px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer;transition:.16s ease}
+[data-mlv-i18n-card] .mlv-i18n-choice:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.28)}
+[data-mlv-i18n-card] .mlv-i18n-choice.active{outline:2px solid color-mix(in srgb,var(--accent, #ffffff) 65%,transparent);background:rgba(255,255,255,.11)}
+[data-mlv-i18n-card] .mlv-i18n-note{margin-top:10px;opacity:.72;font-size:.9em}
+@media(max-width:620px){[data-mlv-i18n-card] .mlv-i18n-options{grid-template-columns:1fr}}
+</style>
+<script id="mlv-i18n-v308">
+(function(){
+'use strict';
+if(window.MLVI18nV308)return;
+
+const STORAGE='michelsLife.language.v308';
+const SUPPORTED=new Set(['en','es']);
+const params=new URLSearchParams(location.search);
+const installerLang=(params.get('installerLang')||'').toLowerCase();
+let saved='';
+try{saved=(localStorage.getItem(STORAGE)||'').toLowerCase()}catch(_){}
+let language=SUPPORTED.has(saved)?saved:(SUPPORTED.has(installerLang)?installerLang:'en');
+if(!saved&&SUPPORTED.has(installerLang)){try{localStorage.setItem(STORAGE,installerLang)}catch(_){}}
+
+const ES={
+  "Dashboard":"Panel",
+  "Today":"Hoy",
+  "Yesterday":"Ayer",
+  "Tomorrow":"Mañana",
+  "Settings":"Configuración",
+  "General":"General",
+  "Color Theme":"Tema de color",
+  "UI Customization":"Personalización de interfaz",
+  "Planning & Next Up":"Planificación y siguiente",
+  "Data & Backup":"Datos y copia de seguridad",
+  "Profile, time ambience and core behavior.":"Perfil, ambiente horario y comportamiento principal.",
+  "Character name":"Nombre del personaje",
+  "Background sets, wallpapers and visual worlds.":"Conjuntos de fondos, wallpapers y mundos visuales.",
+  "Choose the type style used across the interface.":"Elige el estilo de letra usado en toda la interfaz.",
+  "Interface Typography":"Tipografía de la interfaz",
+  "Glass, transparency, density and interface surfaces.":"Cristal, transparencia, densidad y superficies de la interfaz.",
+  "Seasonal panel":"Panel estacional",
+  "Pomodoro, focus sessions and timer behavior.":"Pomodoro, sesiones de enfoque y comportamiento del temporizador.",
+  "Pomodoro Focus Timer":"Temporizador Pomodoro de enfoque",
+  "Alerts and notification behavior.":"Alertas y comportamiento de notificaciones.",
+  "Day planning, Next Up and mission time-of-day rules.":"Planificación del día, Siguiente y reglas de horario de misiones.",
+  "Next Up queue":"Cola de Siguiente",
+  "Cloud-sync all Michel’s Life data and optionally connect Calendar.":"Sincroniza en la nube todos los datos de Michel’s Life y conecta Calendar opcionalmente.",
+  "Export, import, recovery and maintenance tools.":"Herramientas de exportación, importación, recuperación y mantenimiento.",
+  "Reset progress only":"Restablecer solo el progreso",
+  "Cinematic worlds used only by Current Chapter.":"Mundos cinemáticos usados solo por Capítulo actual.",
+  "Chapter Scene Packs":"Paquetes de escenas de capítulo",
+  "Developer, license and build information.":"Desarrollador, licencia e información de compilación.",
+  "Developer · Michel’s Lab":"Desarrollador · Michel’s Lab",
+  "Themes":"Temas",
+  "Background Themes":"Temas de fondo",
+  "Typography":"Tipografía",
+  "Focus & Timers":"Enfoque y temporizadores",
+  "Focus & Timers settings":"Configuración de enfoque y temporizadores",
+  "Chapters":"Capítulos",
+  "About":"Acerca de",
+  "About the Developer":"Acerca del desarrollador",
+  "Google":"Google",
+  "Language":"Idioma",
+  "App language":"Idioma de la app",
+  "Choose the language used throughout Michel's Life.":"Elige el idioma que se usa en Michel's Life.",
+  "You can change this at any time.":"Puedes cambiarlo cuando quieras.",
+  "English":"English",
+  "Spanish":"Español",
+  "Español":"Español",
+  "Selected":"Seleccionado",
+  "SELECTED":"SELECCIONADO",
+  "Preview":"Vista previa",
+  "PREVIEW":"VISTA PREVIA",
+  "Active":"Activo",
+  "Inactive":"Inactivo",
+  "Save":"Guardar",
+  "Saved":"Guardado",
+  "Cancel":"Cancelar",
+  "Close":"Cerrar",
+  "Delete":"Eliminar",
+  "Edit":"Editar",
+  "Add":"Agregar",
+  "Create":"Crear",
+  "Update":"Actualizar",
+  "Reset":"Restablecer",
+  "Restore defaults":"Restaurar valores predeterminados",
+  "Apply":"Aplicar",
+  "Done":"Listo",
+  "Confirm":"Confirmar",
+  "Continue":"Continuar",
+  "Back":"Atrás",
+  "Next":"Siguiente",
+  "Finish":"Finalizar",
+  "Search":"Buscar",
+  "Name":"Nombre",
+  "Description":"Descripción",
+  "Notes":"Notas",
+  "Date":"Fecha",
+  "Time":"Hora",
+  "Start":"Iniciar",
+  "Pause":"Pausar",
+  "Resume":"Reanudar",
+  "Stop":"Detener",
+  "Complete":"Completar",
+  "Completed":"Completado",
+  "Pending":"Pendiente",
+  "Overdue":"Atrasado",
+  "All":"Todos",
+  "None":"Ninguno",
+  "Daily":"Diarias",
+  "Weekly":"Semanales",
+  "Monthly":"Mensuales",
+  "Yearly":"Anuales",
+  "Day":"Día",
+  "Week":"Semana",
+  "Month":"Mes",
+  "Year":"Año",
+  "Statistics":"Estadísticas",
+  "Analytics":"Análisis",
+  "Progress":"Progreso",
+  "Overview":"Resumen",
+  "History":"Historial",
+  "Current Mission":"Misión actual",
+  "Today's 3":"Las 3 de hoy",
+  "To-do today":"Pendientes de hoy",
+  "To-do Today":"Pendientes de hoy",
+  "To-do":"Pendientes",
+  "Premium":"Premium",
+  "Premium Contracts":"Contratos premium",
+  "Weekly Contracts":"Contratos semanales",
+  "Contract":"Contrato",
+  "Contracts":"Contratos",
+  "Reward":"Recompensa",
+  "Claim":"Reclamar",
+  "Claim reward":"Reclamar recompensa",
+  "Tasks":"Tareas",
+  "Task":"Tarea",
+  "Add task":"Agregar tarea",
+  "New task":"Nueva tarea",
+  "Delete task":"Eliminar tarea",
+  "Edit task":"Editar tarea",
+  "Complete task":"Completar tarea",
+  "No tasks yet":"Aún no hay tareas",
+  "No tasks for today":"No hay tareas para hoy",
+  "Move to tomorrow":"Mover a mañana",
+  "Move to today":"Mover a hoy",
+  "Priority":"Prioridad",
+  "High":"Alta",
+  "Medium":"Media",
+  "Low":"Baja",
+  "Focus":"Enfoque",
+  "Focus timer":"Temporizador de enfoque",
+  "Timer":"Temporizador",
+  "Timers":"Temporizadores",
+  "Break":"Descanso",
+  "Short break":"Descanso corto",
+  "Long break":"Descanso largo",
+  "Minutes":"Minutos",
+  "Sound":"Sonido",
+  "Sounds":"Sonidos",
+  "Notifications":"Notificaciones",
+  "Enable":"Activar",
+  "Enabled":"Activado",
+  "Disable":"Desactivar",
+  "Disabled":"Desactivado",
+  "Current Chapter":"Capítulo actual",
+  "Chapter":"Capítulo",
+  "Chapter Scenes":"Escenas de capítulo",
+  "Create Chapter":"Crear capítulo",
+  "New Chapter":"Nuevo capítulo",
+  "End Chapter":"Finalizar capítulo",
+  "Delete Chapter":"Eliminar capítulo",
+  "Start date":"Fecha de inicio",
+  "End date":"Fecha de fin",
+  "Scene":"Escena",
+  "Scene Pack":"Paquete de escenas",
+  "Appearance":"Apariencia",
+  "Atmosphere":"Atmósfera",
+  "Compact":"Compacto",
+  "Comfortable":"Cómodo",
+  "Spacious":"Espacioso",
+  "Density":"Densidad",
+  "Panel opacity":"Opacidad de paneles",
+  "Opacity":"Opacidad",
+  "Gold":"Dorado",
+  "Premium / Gold":"Premium / Dorado",
+  "Reset progress":"Restablecer progreso",
+  "Reset Progress":"Restablecer progreso",
+  "Connect Google":"Conectar Google",
+  "Disconnect Google":"Desconectar Google",
+  "Connected":"Conectado",
+  "Not connected":"No conectado",
+  "Cloud Sync":"Sincronización en la nube",
+  "Cloud sync":"Sincronización en la nube",
+  "Sync":"Sincronizar",
+  "Sync now":"Sincronizar ahora",
+  "Last sync":"Última sincronización",
+  "Google Drive":"Google Drive",
+  "Google Calendar":"Google Calendar",
+  "Calendar":"Calendario",
+  "Authorization":"Autorización",
+  "Authorize":"Autorizar",
+  "Reconnect":"Reconectar",
+  "Account":"Cuenta",
+  "Data":"Datos",
+  "Export":"Exportar",
+  "Import":"Importar",
+  "Backup":"Copia de seguridad",
+  "Restore":"Restaurar",
+  "Developer":"Desarrollador",
+  "Version":"Versión",
+  "Website":"Sitio web",
+  "Email":"Correo",
+  "License":"Licencia",
+  "Streak":"Racha",
+  "Best streak":"Mejor racha",
+  "Tasks completed":"Tareas completadas",
+  "Completion rate":"Tasa de finalización",
+  "This week":"Esta semana",
+  "This month":"Este mes",
+  "This year":"Este año",
+  "No data yet":"Aún no hay datos",
+  "Add mission":"Agregar misión",
+  "New mission":"Nueva misión",
+  "Delete mission":"Eliminar misión",
+  "Mission":"Misión",
+  "Missions":"Misiones",
+  "Journal":"Diario",
+  "New entry":"Nueva entrada",
+  "Add entry":"Agregar entrada",
+  "Entries":"Entradas",
+  "Goals":"Metas",
+  "Goal":"Meta",
+  "New goal":"Nueva meta",
+  "Add goal":"Agregar meta",
+  "Habits":"Hábitos",
+  "Habit":"Hábito",
+  "New habit":"Nuevo hábito",
+  "Add habit":"Agregar hábito",
+  "Achievements":"Logros",
+  "Achievement":"Logro",
+  "Level":"Nivel",
+  "Experience":"Experiencia",
+  "XP":"XP",
+  "Points":"Puntos",
+  "Filters":"Filtros",
+  "Filter":"Filtro",
+  "Clear":"Limpiar",
+  "Clear all":"Limpiar todo",
+  "Open":"Abrir",
+  "Show":"Mostrar",
+  "Hide":"Ocultar",
+  "More":"Más",
+  "Less":"Menos",
+  "On":"Activado",
+  "Off":"Desactivado",
+  "Yes":"Sí",
+  "No":"No",
+  "Settings category navigation shell.":"Navegación por categorías de Configuración.",
+  "Settings sidebar":"Barra lateral de Configuración",
+  "Time ambience":"Ambiente horario",
+  "Color presets, window palette, accents, Gold and text colors.":"Preajustes de color, paleta de ventana, acentos, dorado y colores de texto.",
+  "Color theme":"Tema de color",
+  "Pick a preset or create your own window palette.":"Elige un preajuste o crea tu propia paleta de ventana.",
+  "Accents":"Acentos",
+  "Window base":"Base de la ventana",
+  "Main text":"Texto principal",
+  "Secondary text":"Texto secundario",
+  "Live Preview":"Vista previa en vivo",
+  "Glass tint, borders and glow.":"Tinte del cristal, bordes y resplandor.",
+  "Atmosphere / glass tint":"Atmósfera / tinte del cristal",
+  "Main left navigation shell.":"Barra principal de navegación izquierda.",
+  "Large tab panels and Settings sections.":"Paneles grandes de pestañas y secciones de Configuración.",
+  "Main panel":"Panel principal",
+  "Main Panel":"Panel principal",
+  "Header / hero":"Encabezado / destacado",
+  "Header / Hero":"Encabezado / destacado",
+  "Inner card":"Tarjeta interna",
+  "Inner Card":"Tarjeta interna",
+  "Card":"Tarjeta",
+  "Sidebar":"Barra lateral",
+  "Dock":"Dock",
+  "Current Mission dock":"Dock de Misión actual",
+  "Current Chapter shade and top summary surfaces.":"Sombreado de Capítulo actual y superficies superiores de resumen.",
+  "Next Up / Focus":"Siguiente / Enfoque",
+  "Next Up and Focus panels.":"Paneles de Siguiente y Enfoque.",
+  "Mission / KPI / contract":"Misión / KPI / contrato",
+  "Missions, contracts, KPIs and nested cards.":"Misiones, contratos, KPI y tarjetas anidadas.",
+  "Use custom opacity":"Usar opacidad personalizada",
+  "Changes while you drag":"Cambia mientras arrastras",
+  "Every surface uses a true 0–100% range. The preview shows exactly which layer each slider controls.":"Cada superficie usa un rango real de 0–100 %. La vista previa muestra exactamente qué capa controla cada deslizador.",
+  "Canvas-driven animated month scene.":"Escena mensual animada mediante canvas.",
+  "Animated decoration off":"Decoración animada desactivada",
+  "Animated decoration on":"Decoración animada activada",
+  "Apply timer settings":"Aplicar configuración del temporizador",
+  "Apply to one target job":"Aplicar a una tarea objetivo",
+  "A running timer is never silently restarted. New durations apply immediately when the timer is ready or paused.":"Un temporizador en marcha nunca se reinicia silenciosamente. Las nuevas duraciones se aplican cuando está listo o en pausa.",
+  "Work min":"Min. de trabajo",
+  "Break min":"Min. de descanso",
+  "Work minutes":"Minutos de trabajo",
+  "Break minutes":"Minutos de descanso",
+  "Auto-start break":"Iniciar descanso automáticamente",
+  "Classic Pomodoro":"Pomodoro clásico",
+  "Deep work":"Trabajo profundo",
+  "Your own rhythm":"Tu propio ritmo",
+  "Open Focus controls":"Abrir controles de Enfoque",
+  "Recent Focus":"Enfoque reciente",
+  "No Focus blocks saved yet":"Aún no hay bloques de Enfoque guardados",
+  "Unassigned Focus":"Enfoque sin asignar",
+  "Focus mission":"Misión de enfoque",
+  "Choose how many missions can stay in your ordered queue.":"Elige cuántas misiones pueden permanecer en tu cola ordenada.",
+  "Maximum Next Up missions":"Máximo de misiones en Siguiente",
+  "Default is 6. The floating dock grows to a second row when needed.":"El valor predeterminado es 6. El dock flotante crece a una segunda fila cuando es necesario.",
+  "Keep Plan my day first":"Mantener Planificar mi día primero",
+  "Auto-open Today Plan after Plan my day":"Abrir automáticamente el Plan de hoy después de Planificar mi día",
+  "Once per new day, the matching mission is placed at #1 automatically.":"Una vez por cada nuevo día, la misión correspondiente se coloca automáticamente en el puesto #1.",
+  "Mission time of day":"Horario de la misión",
+  "Dashboard missions are grouped into Morning, Afternoon and Night using the same clock logic as the background.":"Las misiones del Panel se agrupan en Mañana, Tarde y Noche usando la misma lógica horaria que el fondo.",
+  "Morning":"Mañana",
+  "Afternoon":"Tarde",
+  "Night":"Noche",
+  "Dawn":"Amanecer",
+  "Noon":"Mediodía",
+  "Late night":"Noche avanzada",
+  "Automatic":"Automático",
+  "Manual":"Manual",
+  "Auto · Current Mission":"Auto · Misión actual",
+  "Execution, review & recovery":"Ejecución, revisión y recuperación",
+  "Current Mission, link warnings, Weekly Review and automatic recovery snapshots.":"Misión actual, advertencias de enlaces, Revisión semanal y copias automáticas de recuperación.",
+  "Controls the new execution system without adding energy tags or completion notes.":"Controla el nuevo sistema de ejecución sin añadir etiquetas de energía ni notas de finalización.",
+  "Excessive-link warning threshold":"Umbral de advertencia por exceso de enlaces",
+  "Weekly Review":"Revisión semanal",
+  "Open Weekly Review":"Abrir Revisión semanal",
+  "Recovery snapshots":"Copias de recuperación",
+  "Automatic snapshots":"Copias automáticas",
+  "The five newest states are retained.":"Se conservan los cinco estados más recientes.",
+  "Create snapshot now":"Crear copia ahora",
+  "Safe updates":"Actualizaciones seguras",
+  "Updates preserve the same data profile and create a restore point before replacing the app.":"Las actualizaciones conservan el mismo perfil de datos y crean un punto de restauración antes de reemplazar la app.",
+  "Check for updates":"Buscar actualizaciones",
+  "Detected update":"Actualización detectada",
+  "Choose newer EXE…":"Elegir EXE más reciente…",
+  "Backup & restore":"Copia de seguridad y restauración",
+  "Export Michel's Life":"Exportar Michel's Life",
+  "Import backup":"Importar copia de seguridad",
+  "Full Michel’s Life data, import and reset tools in one place.":"Todos los datos de Michel’s Life, importación y herramientas de restablecimiento en un solo lugar.",
+  "App folder + Downloads":"Carpeta de la app + Descargas",
+  "Local scan":"Búsqueda local",
+  "Open Maintenance":"Abrir mantenimiento",
+  "Reset app":"Restablecer app",
+  "Restart progress without deleting missions, categories, presets, settings, background sets or premium contracts.":"Reinicia el progreso sin eliminar misiones, categorías, preajustes, configuración, conjuntos de fondos ni contratos premium.",
+  "This clears completions, XP,, achievements and progress history. Missions keep their archived and hidden state.":"Esto elimina finalizaciones, XP, logros e historial de progreso. Las misiones conservan su estado archivado y oculto.",
+  "Mission XP balance":"Balance de XP de misiones",
+  "Mission XP is controlled only by difficulty. Individual mission XP fields are disabled.":"El XP de las misiones se controla únicamente por dificultad. Los campos individuales de XP están desactivados.",
+  "Save XP scale":"Guardar escala de XP",
+  "Easy":"Fácil",
+  "Hard":"Difícil",
+  "Intense":"Intensa",
+  "Boss":"Jefe",
+  "Current Chapter only. Artwork and ambient motion stay independent from the general Michel’s Life background.":"Solo para Capítulo actual. El arte y el movimiento ambiental permanecen independientes del fondo general de Michel’s Life.",
+  "Visual stage":"Etapa visual",
+  "No active chapter":"No hay capítulo activo",
+  "Reassign automatic stages":"Reasignar etapas automáticas",
+  "Existing active missions were assigned by their title, description, category and linked project. A stage changed manually from a mission card is preserved.":"Las misiones activas se asignaron según su título, descripción, categoría y proyecto vinculado. Una etapa cambiada manualmente desde una tarjeta de misión se conserva.",
+  "Current build":"Versión actual",
+  "Contact:":"Contacto:",
+  "Michel’s Life is created and maintained by Michel Duarte under Michel’s Lab. Independent software focused on productivity, life systems and personal tools.":"Michel’s Life es creado y mantenido por Michel Duarte bajo Michel’s Lab. Software independiente enfocado en productividad, sistemas de vida y herramientas personales.",
+  "Proprietary · Personal use":"Propietario · Uso personal",
+  "Choose by era. Every card keeps its own permanent preview, so you can compare styles without selecting them first.":"Elige por era. Cada tarjeta conserva su propia vista previa permanente para que puedas comparar estilos sin seleccionarlos primero.",
+  "Primary interface lettering.":"Tipografía principal de la interfaz.",
+  "Helper, labels and secondary lettering.":"Texto auxiliar, etiquetas y tipografía secundaria.",
+  "Wallpaper worlds only. Original Dynamic Sky uses the same live six-stage pipeline as every other theme.":"Solo mundos de fondo. Original Dynamic Sky usa el mismo sistema dinámico de seis etapas que los demás temas.",
+  "Michel’s Life original sky, changing automatically with the day.":"Cielo original de Michel’s Life, cambia automáticamente a lo largo del día.",
+  "Background photos":"Fotos de fondo",
+  "Default photo":"Foto predeterminada",
+  "Choose photo":"Elegir foto",
+  "Apply to one target job":"Aplicar a una tarea objetivo",
+  "Remove":"Eliminar",
+  "Compare":"Comparar",
+  "Skip":"Omitir",
+  "Ready":"Listo",
+  "Linked":"Vinculado",
+  "Direct":"Directo",
+  "Automatic snapshots":"Copias automáticas",
+  "Clear Next Up":"Limpiar Siguiente",
+  "Clean weak contract links":"Limpiar vínculos débiles de contratos",
+  "Undo last action":"Deshacer última acción",
+  "Save settings":"Guardar configuración",
+  "Save system settings":"Guardar configuración del sistema",
+  "Open":"Abrir",
+  "STATUS":"ESTADO",
+  "CURRENT PHASE":"FASE ACTUAL",
+  "APP":"APP",
+  "PRESET":"PREAJUSTE",
+  "Navigation":"Navegación",
+  "Planning, projects & focus":"Planificación, proyectos y enfoque",
+  "Story":"Historia",
+  "Work":"Trabajo",
+  "Soft":"Suave",
+  "Severe":"Severa",
+  "Custom":"Personalizado",
+  "Auto":"Auto"
+};
+
+const originalText=new WeakMap();
+const originalAttrs=new WeakMap();
+const ATTRS=['title','placeholder','aria-label','data-tooltip'];
+
+function spanishValue(value){
+  const trimmed=String(value??'').trim();
+  if(!trimmed)return value;
+  if(Object.prototype.hasOwnProperty.call(ES,trimmed)){
+    const left=String(value).match(/^\s*/)?.[0]||'';
+    const right=String(value).match(/\s*$/)?.[0]||'';
+    return left+ES[trimmed]+right;
+  }
+  return value;
+}
+function translateValue(value){
+  return language==='es'?spanishValue(value):value;
+}
+
+function shouldSkip(node){
+  const p=node.parentElement;
+  if(!p)return true;
+  return !!p.closest('script,style,textarea,pre,code,[contenteditable="true"],[data-mlv-i18n-skip]');
+}
+
+function translateTextNode(node){
+  if(shouldSkip(node))return;
+  const current=node.nodeValue||'';
+  const trimmed=current.trim();
+  if(language==='es'){
+    if(Object.prototype.hasOwnProperty.call(ES,trimmed)){
+      originalText.set(node,current);
+      const translated=spanishValue(current);
+      if(translated!==current)node.nodeValue=translated;
+      return;
+    }
+    const base=originalText.get(node);
+    if(base&&current===spanishValue(base))return;
+    return;
+  }
+  const base=originalText.get(node);
+  if(base&&current===spanishValue(base))node.nodeValue=base;
+}
+
+function translateAttrs(el){
+  if(!(el instanceof Element))return;
+  let originals=originalAttrs.get(el);
+  if(!originals){originals={};originalAttrs.set(el,originals)}
+  for(const attr of ATTRS){
+    if(!el.hasAttribute(attr))continue;
+    const current=el.getAttribute(attr)||'';
+    const trimmed=current.trim();
+    if(language==='es'){
+      if(Object.prototype.hasOwnProperty.call(ES,trimmed)){
+        originals[attr]=current;
+        const translated=spanishValue(current);
+        if(translated!==current)el.setAttribute(attr,translated);
+      }
+      continue;
+    }
+    const base=originals[attr];
+    if(base&&current===spanishValue(base))el.setAttribute(attr,base);
+  }
+}
+
+function translateTree(root=document.body){
+  if(!root)return;
+  if(root.nodeType===Node.TEXT_NODE){translateTextNode(root);return}
+  if(root.nodeType!==Node.ELEMENT_NODE&&root.nodeType!==Node.DOCUMENT_NODE&&root.nodeType!==Node.DOCUMENT_FRAGMENT_NODE)return;
+  if(root instanceof Element)translateAttrs(root);
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);
+  let n;
+  while((n=walker.nextNode())){
+    if(n.nodeType===Node.TEXT_NODE)translateTextNode(n);
+    else translateAttrs(n);
+  }
+}
+
+function cardMarkup(){
+  const es=language==='es';
+  return '<section class="card" data-mlv-i18n-card data-mlv-i18n-skip>'+
+    '<div class="section-title"><div><h2>'+(es?'Idioma':'Language')+'</h2><p>'+(es?"Elige el idioma que se usa en Michel\'s Life.":"Choose the language used throughout Michel\'s Life.")+'</p></div><span class="pill">EN / ES</span></div>'+
+    '<div class="mlv-i18n-options">'+
+      '<button type="button" class="mlv-i18n-choice'+(language==='en'?' active':'')+'" data-mlv-lang="en">English</button>'+
+      '<button type="button" class="mlv-i18n-choice'+(language==='es'?' active':'')+'" data-mlv-lang="es">Español</button>'+
+    '</div>'+
+    '<div class="mlv-i18n-note">'+(es?'Puedes cambiarlo cuando quieras.':'You can change this at any time.')+'</div>'+
+  '</section>';
+}
+
+function mountCard(){
+  const generalButton=document.querySelector('[data-v30171-setting="general"]');
+  const pane=document.querySelector('[data-v30171-pane="general"]')||
+    (generalButton?.classList.contains('active')?document.querySelector('.v30171-settings-pane.active'):null);
+  if(!pane)return;
+  let card=pane.querySelector('[data-mlv-i18n-card]');
+  if(!card){
+    const t=document.createElement('template');
+    t.innerHTML=cardMarkup();
+    card=t.content.firstElementChild;
+    const title=pane.querySelector('.v30171-pane-title');
+    if(title)title.insertAdjacentElement('afterend',card);else pane.prepend(card);
+  }else{
+    const t=document.createElement('template');
+    t.innerHTML=cardMarkup();
+    card.replaceWith(t.content.firstElementChild);
+  }
+}
+
+function setLanguage(next,persist=true){
+  next=String(next||'').toLowerCase();
+  if(!SUPPORTED.has(next))return;
+  language=next;
+  document.documentElement.lang=next;
+  document.documentElement.dataset.mlvLanguage=next;
+  if(persist){try{localStorage.setItem(STORAGE,next)}catch(_){}}
+  translateTree(document.body);
+  mountCard();
+  try{window.dispatchEvent(new CustomEvent('mlv:languagechange',{detail:{language:next}}))}catch(_){}
+}
+
+document.addEventListener('click',e=>{
+  if(e.target.closest?.('[data-v30171-setting="general"]')){
+    setTimeout(mountCard,80);
+  }
+  const b=e.target.closest?.('[data-mlv-lang]');
+  if(!b)return;
+  e.preventDefault();
+  setLanguage(b.dataset.mlvLang,true);
+},true);
+
+const observer=new MutationObserver(records=>{
+  let needsCard=false;
+  for(const r of records){
+    if(r.type==='characterData'){
+      translateTextNode(r.target);
+      continue;
+    }
+    if(r.type==='attributes'){
+      const el=r.target;
+      if(el?.matches?.('[data-v30171-setting="general"],.v30171-settings-pane'))needsCard=true;
+      continue;
+    }
+    for(const n of r.addedNodes){
+      translateTree(n);
+      if(n.nodeType===1&&(n.matches?.('[data-v30171-setting="general"],.v30171-settings-pane')||n.querySelector?.('[data-v30171-setting="general"],.v30171-settings-pane')))needsCard=true;
+    }
+  }
+  clearTimeout(observer._cardTimer);
+  observer._cardTimer=setTimeout(()=>{if(needsCard)mountCard()},80);
+});
+function start(){
+  document.documentElement.lang=language;
+  document.documentElement.dataset.mlvLanguage=language;
+  translateTree(document.body);
+  mountCard();
+  for(const delay of [120,350,800,1500,3000])setTimeout(()=>{translateTree(document.body);mountCard()},delay);
+  try{observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']})}catch(_){}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+
+window.MLVI18nV308={
+  version:'3.0.8',
+  get language(){return language},
+  set:setLanguage,
+  translate:translateTree,
+  mount:mountCard,
+  translations:ES
+};
+})();
+</script>

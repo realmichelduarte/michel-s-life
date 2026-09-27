@@ -13,8 +13,61 @@ await page.addInitScript(()=>{
   try{localStorage.setItem('michelsLife.onboarding.v30200','done')}catch(_){}
 });
 try{
-  await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});
-  await page.waitForFunction(()=>window.LeftNavV30171&&document.querySelector('#v30171Sidebar'),null,{timeout:60000});
+  const languageUrl=url+(url.includes('?')?'&':'?')+'installerLang=es';
+  await page.goto(languageUrl,{waitUntil:'domcontentloaded',timeout:60000});
+  await page.waitForFunction(()=>window.LeftNavV30171&&window.MLVI18nV308&&document.querySelector('#v30171Sidebar'),null,{timeout:60000});
+
+  await page.evaluate(()=>window.LeftNavV30171.route('settings'));
+  await page.waitForSelector('[data-v30171-setting="general"]',{timeout:10000});
+  await page.click('[data-v30171-setting="general"]');
+  await page.waitForTimeout(300);
+  const i18nSettingsDebug=await page.evaluate(()=>({
+    buttons:[...document.querySelectorAll('[data-v30171-setting]')].map(x=>({setting:x.dataset.v30171Setting,cls:x.className,text:(x.textContent||'').trim().slice(0,80)})),
+    panes:[...document.querySelectorAll('[data-v30171-pane]')].map(x=>({pane:x.dataset.v30171Pane,cls:x.className,text:(x.textContent||'').trim().slice(0,120)})),
+    activeSettingsPanes:[...document.querySelectorAll('.v30171-settings-pane')].filter(x=>x.offsetParent!==null).map(x=>({pane:x.dataset.v30171Pane||'',cls:x.className})),
+    cards:document.querySelectorAll('[data-mlv-i18n-card]').length
+  }));
+  console.log('I18N_SETTINGS_DEBUG '+JSON.stringify(i18nSettingsDebug));
+  await page.waitForSelector('.v30171-settings-pane.active [data-mlv-i18n-card]',{timeout:10000});
+  await page.waitForTimeout(250);
+
+  const i18nTextCatalog=await page.evaluate(()=>{
+    const roots=[document.querySelector('#v30171Sidebar'),...document.querySelectorAll('[data-v30171-pane]')].filter(Boolean);
+    const values=new Set();
+    for(const root of roots){
+      const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+      let n;
+      while((n=w.nextNode())){
+        if(n.parentElement?.closest('script,style,textarea,pre,code'))continue;
+        const s=(n.nodeValue||'').replace(/\s+/g,' ').trim();
+        if(s&&s.length<=180)values.add(s);
+      }
+    }
+    return [...values].sort((a,b)=>a.localeCompare(b));
+  });
+  console.log('I18N_TEXT_CATALOG '+JSON.stringify(i18nTextCatalog));
+
+  const installerLanguage=await page.evaluate(()=>({
+    language:window.MLVI18nV308?.language||'',
+    htmlLang:document.documentElement.lang,
+    stored:localStorage.getItem('michelsLife.language.v308')||'',
+    cardTitle:(document.querySelector('[data-mlv-i18n-card] h2')?.textContent||'').trim(),
+    hasSpanishTypography:[...document.querySelectorAll('.v30171-settings-btn')].some(x=>(x.textContent||'').includes('Tipografía')),
+    hasSpanishChoice:!!document.querySelector('[data-mlv-lang="es"].active')
+  }));
+  ok(installerLanguage.language==='es'&&installerLanguage.htmlLang==='es'&&installerLanguage.stored==='es','Installer Spanish choice was not persisted: '+JSON.stringify(installerLanguage));
+  ok(installerLanguage.cardTitle==='Idioma'&&installerLanguage.hasSpanishTypography&&installerLanguage.hasSpanishChoice,'Spanish UI did not render in Settings: '+JSON.stringify(installerLanguage));
+
+  await page.evaluate(()=>window.MLVI18nV308.set('en',true));
+  await page.waitForFunction(()=>window.MLVI18nV308?.language==='en'&&localStorage.getItem('michelsLife.language.v308')==='en');
+  await page.waitForTimeout(150);
+  const switchedEnglish=await page.evaluate(()=>({
+    htmlLang:document.documentElement.lang,
+    cardTitle:(document.querySelector('[data-mlv-i18n-card] h2')?.textContent||'').trim(),
+    hasEnglishTypography:[...document.querySelectorAll('.v30171-settings-btn')].some(x=>(x.textContent||'').includes('Typography')),
+    hasEnglishChoice:!!document.querySelector('[data-mlv-lang="en"].active')
+  }));
+  ok(switchedEnglish.htmlLang==='en'&&switchedEnglish.cardTitle==='Language'&&switchedEnglish.hasEnglishTypography&&switchedEnglish.hasEnglishChoice,'In-app English override failed: '+JSON.stringify(switchedEnglish));
 
   await page.evaluate(()=>{
     try{
@@ -162,7 +215,7 @@ try{
   await page.waitForTimeout(600);
   await page.screenshot({path:`${out}/05-dashboard.png`,fullPage:true});
 
-  console.log(JSON.stringify({logo,typographyRoute,typographyPaletteCheck,headingFonts,avatar,chapterTarget:target,typography:'midnights',cloudPopups:cloudCount},null,2));
+  console.log(JSON.stringify({installerLanguage,switchedEnglish,logo,typographyRoute,typographyPaletteCheck,headingFonts,avatar,chapterTarget:target,typography:'midnights',cloudPopups:cloudCount},null,2));
 } finally {
   await browser.close();
 }

@@ -40,26 +40,31 @@ def main() -> None:
         temp = Path(tmp.name)
 
     try:
-        with zipfile.ZipFile(bundle, "r") as src, zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as dst:
-            for info in src.infolist():
-                name = info.filename.replace("\\", "/")
-                if name == "index.html" or name in DROP:
-                    continue
-                dst.writestr(info, src.read(info.filename))
-            dst.writestr("index.html", index.read_bytes())
+        with zipfile.ZipFile(bundle, "r") as src:
+            source_names = src.namelist()
+            source_jpg = sum(n.lower().endswith(".jpg") for n in source_names)
+            if source_jpg not in (204, 205):
+                raise SystemExit(f"source AppBundle invalid: jpg={source_jpg}")
+            with zipfile.ZipFile(temp, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as dst:
+                for info in src.infolist():
+                    name = info.filename.replace("\\", "/")
+                    if name == "index.html" or name in DROP:
+                        continue
+                    dst.writestr(info, src.read(info.filename))
+                dst.writestr("index.html", index.read_bytes())
 
         with zipfile.ZipFile(temp) as check:
             names = check.namelist()
             jpg = sum(n.lower().endswith(".jpg") for n in names)
-            if "index.html" not in names or jpg != 204 or check.testzip() is not None:
-                raise SystemExit(f"rebuilt AppBundle invalid: index={'index.html' in names}, jpg={jpg}")
+            if "index.html" not in names or jpg != source_jpg or check.testzip() is not None:
+                raise SystemExit(f"rebuilt AppBundle invalid: index={'index.html' in names}, jpg={jpg}, expected_jpg={source_jpg}")
 
         temp.replace(bundle)
     finally:
         if temp.exists():
             temp.unlink()
 
-    print(f"AppBundle ready: {bundle} · 204 JPEG assets")
+    print(f"AppBundle ready: {bundle} · {source_jpg} JPEG assets")
 
 if __name__ == "__main__":
     main()

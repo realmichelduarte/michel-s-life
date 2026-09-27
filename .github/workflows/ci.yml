@@ -25,6 +25,9 @@ jobs:
       - name: Release-readiness smoke tests
         run: python tools/release_smoke_test.py
 
+      - name: Inspect host bridge points
+        run: python tools/inspect_host_bridge.py
+
       - name: Canonical frontend validation
         run: python tools/validate_generated_index.py --index src/MichelsLife/frontend/index.html
 

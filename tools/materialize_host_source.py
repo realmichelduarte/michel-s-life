@@ -28,6 +28,31 @@ for name in ('Program.cs','GoogleCalendarService.cs'):
         raise SystemExit(f'{name} still contains stale app version markers: {stale}')
     if name=='Program.cs' and f'CurrentAppVersion = new("{APP_VERSION}")' not in text:
         raise SystemExit(f'Program.cs missing CurrentAppVersion {APP_VERSION}')
+
+    if name=='Program.cs':
+        nav_old=f'            _webView.CoreWebView2.Navigate("https://michelslife.local/index.html?build={APP_VERSION}");'
+        nav_new=f'''            var installerLanguagePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "MichelsLife",
+                "install-language.txt"
+            );
+            var installerLanguage = "";
+            try
+            {{
+                if (File.Exists(installerLanguagePath))
+                    installerLanguage = File.ReadAllText(installerLanguagePath).Trim().ToLowerInvariant();
+            }}
+            catch {{ }}
+            if (installerLanguage != "en" && installerLanguage != "es")
+                installerLanguage = "";
+            var installerLanguageQuery = installerLanguage.Length > 0
+                ? "&installerLang=" + installerLanguage
+                : "";
+            _webView.CoreWebView2.Navigate("https://michelslife.local/index.html?build={APP_VERSION}" + installerLanguageQuery);'''
+        if 'installerLanguageQuery' not in text:
+            if nav_old not in text:
+                raise SystemExit('Program.cs navigation anchor missing for installer language bridge')
+            text=text.replace(nav_old,nav_new)
     data=text.encode('utf-8')
     (ROOT/name).write_bytes(data)
     print('materialized',name)

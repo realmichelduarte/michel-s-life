@@ -74,6 +74,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $PSNativeCommandUseErrorActionPreference = $true
           python tools/validate_generated_index.py --index src/MichelsLife/frontend/index.html
+          python tools/append_overlay.py --index src/MichelsLife/frontend/index.html --overlay src/MichelsLife/AppPatches/i18n-v308.html --marker "mlv-i18n-v308"
           python tools/replace_bundle_index.py --bundle src/MichelsLife/AppBundle.zip --index src/MichelsLife/frontend/index.html
           python tools/inject_bundle_asset.py --bundle src/MichelsLife/AppBundle.zip --source branding/michel_duarte_avatar.jpg --arcname assets/michel_duarte_avatar.jpg
           python tools/inject_bundle_asset.py --bundle src/MichelsLife/AppBundle.zip --source branding/michels_life_logo.svg --arcname assets/michels_life_logo.svg
