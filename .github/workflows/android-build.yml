@@ -54,7 +54,7 @@ permissions:
 
 env:
   RELEASES_REPO: michels-lab/michel-s-life-releases
-  ANDROID_VERSION: 0.2.2
+  ANDROID_VERSION: 0.2.3
   ANDROID_UPLOAD_KEYSTORE_BASE64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 }}
   ANDROID_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_STORE_PASSWORD }}
   ANDROID_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_UPLOAD_KEY_ALIAS }}
@@ -250,3 +250,46 @@ jobs:
           path: artifacts/android/
           if-no-files-found: error
           retention-days: 7
+
+  installed-candidate-smoke:
+    name: Fresh install + launch of same-run candidate Android APK on Android 16
+    needs: android
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANDROID_VERSION: 0.2.3
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download candidate APK from SAME workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: MichelsLife-Android-TEST-v${{ env.ANDROID_VERSION }}
+          path: artifacts/candidate
+
+      - name: Enable GitHub hosted emulator KVM
+        shell: bash
+        run: |
+          if [ -e /dev/kvm ]; then sudo chmod 666 /dev/kvm; fi
+
+      - name: Install and launch real candidate in isolated Android 16 device
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          avd-name: michels-life-candidate-android16
+          emulator-options: -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect
+          disable-animations: true
+          emulator-boot-timeout: 600
+          script: bash android/tools/smoke_candidate_apk_install.sh
+
+      - name: Retain exact installed APK evidence and Android screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MichelsLife-Android-InstallSmoke-v${{ env.ANDROID_VERSION }}
+          path: artifacts/candidate-install/
+          if-no-files-found: warn
+          retention-days: 30

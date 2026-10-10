@@ -10,7 +10,7 @@ adaptive_round_icon = ROOT / "app/src/main/res/mipmap-anydpi-v26/ic_launcher_rou
 launcher_foreground = ROOT / "app/src/main/res/drawable/ic_launcher_foreground.xml"
 
 required_bridge = [
-    "window.__MICHELSLIFE_ANDROID_BRIDGE__='0.2.2'",
+    "window.__MICHELSLIFE_ANDROID_BRIDGE__='0.2.3'",
     "const MOBILE_BREAKPOINT=4096;",
     "@media(min-width:900px) and (max-width:${MOBILE_BREAKPOINT}px)",
     "mlv-android-topbar",

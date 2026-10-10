@@ -47,8 +47,8 @@ The Play Store track uses an Android App Bundle (AAB).
 
 Current Play identity:
 - package: `com.michelslab.michelslife`
-- versionCode: `4`
-- versionName: `0.2.2`
+- versionCode: `5`
+- versionName: `0.2.3`
 - targetSdk: `36`
 
 The Gradle release build supports an upload keystore through environment variables:
